@@ -24,12 +24,12 @@ void loop() {
   Serial.print(temp);
   Serial.print(" degrees Celcius\n");
   Udp.beginPacket(remote_ip, 54369);
-  Udp.write("Hello from arduino!");
-  //uint8_t *buf = (uint8_t*)temp;
-  //Udp.write(buf, sizeof(int32_t));
-  //Udp.write(buf, sizeof(int32_t));
-  //Udp.write(buf, sizeof(int32_t));
-  //Udp.write(buf, sizeof(int32_t));
+  //Udp.write("Hello from arduino!");
+  uint8_t *buf = (uint8_t*)&temp;
+  Udp.write(buf, sizeof(int32_t));
+  Udp.write(buf, sizeof(int32_t));
+  Udp.write(buf, sizeof(int32_t));
+  Udp.write(buf, sizeof(int32_t));
   Udp.endPacket();
   delay(1000);
 }
