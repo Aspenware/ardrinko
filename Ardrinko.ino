@@ -6,6 +6,8 @@
 // Pin layout:
 //  A0: Temperature reading (from TMP36 probe)
 //  A1: Photo resistor (SEN-09088)
+//  A2: LED
+//  A3: Button
 
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x0E, 0xB8, 0x93 };
 IPAddress ip(10, 5, 0, 10);
@@ -16,6 +18,7 @@ void setup() {
   Serial.begin(9600);
   Ethernet.begin(mac, ip);
   Udp.begin(54369);
+  analogWrite(A2, 0);
 }
 
 void loop() {
@@ -28,7 +31,24 @@ void loop() {
   Udp.write((uint8_t*)&temp, sizeof(int32_t));
   Udp.write((uint8_t*)&door, sizeof(int32_t));
   Udp.endPacket();
-  delay(100);
+  
+  if (analogRead(A3) == 1023) {
+    analogWrite(A2, 255);
+    delay(100);
+    analogWrite(A2, 0);
+    delay(100);
+    analogWrite(A2, 255);
+    delay(100);
+    analogWrite(A2, 0);
+    delay(100);
+    analogWrite(A2, 255);
+    delay(100);
+    analogWrite(A2, 0);
+  } else {
+    analogWrite(A2, 0);
+  }
+  
+  delay(50);
 }
 
 float readVoltage(int pin) {
